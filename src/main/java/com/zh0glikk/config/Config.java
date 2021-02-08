@@ -8,6 +8,6 @@ public class Config {
     public static String currentUserName;
     public static String currentUserPassword;
 
-    public static final String dataPath = Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("data.txt")).getPath();
-
+//    public static final String dataPath = Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResource("data.txt")).getPath();
+    public static final String dataPath = "data.txt";
 }

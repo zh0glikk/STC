@@ -8,12 +8,9 @@ import com.zh0glikk.services.Registration;
 import com.zh0glikk.services.Validation;
 import com.zh0glikk.states.State;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Scanner;
 
 public class Main{
     private static State currentState = State.Menu;
@@ -21,6 +18,7 @@ public class Main{
     private static int attemptsBeforeExit = 3;
 
     public static void main(String[] args) {
+        createFile();
 
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -179,10 +177,7 @@ public class Main{
     private static State signIn(String login, String password) {
         Authorization authorization = new Authorization(new User(
                 login,
-                password,
-                Objects.requireNonNull(User.get(login)).isBlocked(),
-                Objects.requireNonNull(User.get(login)).isPasswordPatternEnabled()
-        ));
+                password));
 
         State result = State.SignIn;
 
@@ -256,5 +251,23 @@ public class Main{
         return state;
     }
 
+    private static void createFile() {
+        File myObj = new File(Config.dataPath);
+        System.out.println(myObj.getAbsolutePath());
+        try {
+            Scanner myReader = new Scanner(myObj);
+            if ( myReader.hasNextLine() ) {
+                return;
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("First run. Creating file with data.");
+        }
 
+        try (FileWriter writer = new FileWriter(Config.dataPath, false)) {
+            writer.write("ADMIN::false:true");
+            writer.flush();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 }

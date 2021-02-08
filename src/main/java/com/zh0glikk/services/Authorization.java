@@ -18,6 +18,18 @@ public class Authorization {
 
     public void authorize() throws Throwable {
         User admin = User.get("ADMIN");
+        boolean isBlocked;
+        boolean isPasswordPatternEnabled;
+
+        try {
+            isBlocked = User.get(this.user.getUserName()).isBlocked();
+            isPasswordPatternEnabled = User.get(this.user.getUserName()).isPasswordPatternEnabled();
+        } catch (NullPointerException e) {
+            throw new WrongLoginData();
+        }
+
+        this.user.setBlocked(isBlocked);
+        this.user.setPasswordPatternEnabled(isPasswordPatternEnabled);
 
         if ( user.isBlocked() ) {
             throw new BlockedUser();
