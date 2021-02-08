@@ -1,7 +1,5 @@
 *.class
-*.jar
 .idea
-target
 out
 
 *.txt
