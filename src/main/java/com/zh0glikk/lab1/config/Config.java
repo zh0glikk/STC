@@ -1,6 +1,4 @@
-package com.zh0glikk.config;
-
-import java.util.Objects;
+package com.zh0glikk.lab1.config;
 
 public class Config {
     public static int passwordLength = 10;

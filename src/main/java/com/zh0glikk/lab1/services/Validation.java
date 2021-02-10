@@ -1,4 +1,4 @@
-package com.zh0glikk.services;
+package com.zh0glikk.lab1.services;
 
 public class Validation {
 

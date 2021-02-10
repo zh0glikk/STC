@@ -1,12 +1,12 @@
-package com.zh0glikk;
+package com.zh0glikk.lab1;
 
-import com.zh0glikk.config.Config;
-import com.zh0glikk.exceptions.*;
-import com.zh0glikk.models.User;
-import com.zh0glikk.services.Authorization;
-import com.zh0glikk.services.Registration;
-import com.zh0glikk.services.Validation;
-import com.zh0glikk.states.State;
+import com.zh0glikk.lab1.config.Config;
+import com.zh0glikk.lab1.exceptions.*;
+import com.zh0glikk.lab1.models.User;
+import com.zh0glikk.lab1.services.Authorization;
+import com.zh0glikk.lab1.services.Registration;
+import com.zh0glikk.lab1.services.Validation;
+import com.zh0glikk.lab1.states.State;
 
 import java.io.*;
 import java.util.Objects;

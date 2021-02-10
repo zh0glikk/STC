@@ -3,3 +3,5 @@
 out
 
 *.txt
+target/maven-archiver
+target/maven-status
