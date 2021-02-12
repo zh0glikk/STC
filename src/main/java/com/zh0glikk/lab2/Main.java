@@ -1,38 +1,38 @@
 package com.zh0glikk.lab2;
 
-import javax.swing.filechooser.FileSystemView;
-import java.awt.*;
-import java.io.File;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
+import com.zh0glikk.lab2.services.ComputerDataGather;
+import com.zh0glikk.lab2.services.Installer;
+
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.prefs.Preferences;
 
 public class Main {
-    private static final String USERNAME = System.getProperty("user.name");
-    private static final String COMPUTER_NAME = System.getProperty("os.name");
-    private static final double WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
-    private static final double HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
-
-    private static final int MOUSE_BUTTONS = java.awt.MouseInfo.getNumberOfButtons();
-
-    private static final int DRIVE_SPACE = (int) (new File(".").getTotalSpace() / (1024 * 1024 * 1024));
-    private static final File[] DRIVES = File.listRoots();
-
+    private static String computerData;
 
     public static void main(String[] args) {
-        System.out.println(System.getProperties());
+        computerData = ComputerDataGather.getData();
 
-        System.out.println(USERNAME);
-        System.out.println(COMPUTER_NAME);
-        System.out.println(WIDTH);
-        System.out.println(HEIGHT);
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.println(MOUSE_BUTTONS);
-        System.out.println(DRIVE_SPACE);
+        System.out.println("Enter your secret key: ");
+        int secretkey = scanner.nextInt();
 
-        for ( File file : DRIVES ) {
-            System.out.println(file);
+        int result = (int) Math.pow(computerData.hashCode(), secretkey) % computerData.hashCode();
+
+        Preferences userPrefs = Preferences.userRoot().node("zhoglik");
+        userPrefs.putInt("SIGNATURE", result);
+
+
+        System.out.println("Enter installation path: ");
+        String path = scanner.next();
+
+        Installer installer = new Installer();
+
+        try {
+            installer.install(path);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 }

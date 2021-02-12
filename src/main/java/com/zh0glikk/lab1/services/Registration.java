@@ -1,8 +1,7 @@
 package com.zh0glikk.lab1.services;
 
 import com.zh0glikk.lab1.config.Config;
-import com.zh0glikk.lab1.exceptions.UserRegistration;
-import com.zh0glikk.lab1.exceptions.WrongRegistrationData;
+import com.zh0glikk.lab1.exceptions.*;
 import com.zh0glikk.lab1.models.User;
 
 import java.util.List;

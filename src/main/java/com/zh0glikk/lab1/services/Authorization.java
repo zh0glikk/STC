@@ -1,10 +1,7 @@
 package com.zh0glikk.lab1.services;
 
 import com.zh0glikk.lab1.config.Config;
-import com.zh0glikk.lab1.exceptions.AdminAuthorization;
-import com.zh0glikk.lab1.exceptions.BlockedUser;
-import com.zh0glikk.lab1.exceptions.UserAuthorization;
-import com.zh0glikk.lab1.exceptions.WrongLoginData;
+import com.zh0glikk.lab1.exceptions.*;
 import com.zh0glikk.lab1.models.User;
 
 import java.util.List;

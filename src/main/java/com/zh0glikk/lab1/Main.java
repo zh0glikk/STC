@@ -3,21 +3,37 @@ package com.zh0glikk.lab1;
 import com.zh0glikk.lab1.config.Config;
 import com.zh0glikk.lab1.exceptions.*;
 import com.zh0glikk.lab1.models.User;
-import com.zh0glikk.lab1.services.Authorization;
-import com.zh0glikk.lab1.services.Registration;
-import com.zh0glikk.lab1.services.Validation;
-import com.zh0glikk.lab1.states.State;
+import com.zh0glikk.lab1.services.*;
+import com.zh0glikk.lab1.states.*;
+import com.zh0glikk.lab2.services.ComputerDataGather;
 
 import java.io.*;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.prefs.Preferences;
 
 public class Main{
     private static State currentState = State.Menu;
 
     private static int attemptsBeforeExit = 3;
 
+
+
     public static void main(String[] args) {
+        String computerData = ComputerDataGather.getData();
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter your secret key: ");
+        int secretkey = scanner.nextInt();
+
+        int result = (int) Math.pow(computerData.hashCode(), secretkey) % computerData.hashCode();
+
+        if ( result != Preferences.userRoot().node("zhoglik").getInt("SIGNATURE", 0) ) {
+            System.out.println("Wrong secret key");
+            System.exit(1);
+        }
+
         createFile();
 
         BufferedReader reader = new BufferedReader(
