@@ -1,7 +1,7 @@
-package com.zh0glikk.models;
+package com.zh0glikk.lab1.models;
 
 
-import com.zh0glikk.config.Config;
+import com.zh0glikk.lab1.config.Config;
 
 import java.io.File;
 import java.io.FileNotFoundException;

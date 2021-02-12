@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.zh0glikk.Main
+Main-Class: com.zh0glikk.lab1.Main
 

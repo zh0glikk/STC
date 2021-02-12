@@ -17,8 +17,9 @@
         <maven.compiler.target>15</maven.compiler.target>
     </properties>
 
+
     <build>
-        <finalName>STC</finalName>
+        <finalName>STC_l2</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -28,7 +29,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.zh0glikk.Main</mainClass>
+                            <mainClass>com.zh0glikk.lab2.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
