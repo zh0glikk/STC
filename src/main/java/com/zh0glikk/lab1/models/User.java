@@ -123,7 +123,7 @@ public class User {
         return null;
     }
 
-    public static void update(String login, String password) {
+    public static void updatePassword(String login, String password) {
         List<User> users = User.all();
         String result = "";
 
@@ -146,7 +146,7 @@ public class User {
         }
     }
 
-    public static void update(String login, boolean isBlocked) {
+    public static void updateBlocked(String login, boolean isBlocked) {
         List<User> users = User.all();
         String result = "";
 
@@ -169,7 +169,7 @@ public class User {
         }
     }
 
-    public static void _update(String login, boolean isPasswordPatternEnabled) {
+    public static void updatePasswordPatternEnabled(String login, boolean isPasswordPatternEnabled) {
         List<User> users = User.all();
         String result = "";
 

@@ -17,8 +17,6 @@ public class Main{
 
     private static int attemptsBeforeExit = 3;
 
-
-
     public static void main(String[] args) {
         String computerData = ComputerDataGather.getData();
 
@@ -121,7 +119,7 @@ public class Main{
                                 e.printStackTrace();
                             }
 
-                            User.update( log, !Objects.requireNonNull(User.get(log)).isBlocked());
+                            User.updateBlocked( log, !Objects.requireNonNull(User.get(log)).isBlocked());
                         }
                         case "5" -> {
                             System.out.print("Enter user's login to block/unblock: ");
@@ -132,7 +130,7 @@ public class Main{
                                 e.printStackTrace();
                             }
 
-                            User._update(log, !Objects.requireNonNull(User.get(log)).isPasswordPatternEnabled());
+                            User.updatePasswordPatternEnabled(log, !Objects.requireNonNull(User.get(log)).isPasswordPatternEnabled());
                         }
                     }
                 }
@@ -257,7 +255,7 @@ public class Main{
         }
 
         if ( isRightData ) {
-            User.update(Config.currentUserName, newPassword);
+            User.updatePassword(Config.currentUserName, newPassword);
             state = State.User;
             replyInfo += "Password Changed";
         }
