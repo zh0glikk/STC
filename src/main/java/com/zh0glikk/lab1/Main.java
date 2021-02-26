@@ -3,11 +3,22 @@ package com.zh0glikk.lab1;
 import com.zh0glikk.lab1.config.Config;
 import com.zh0glikk.lab1.exceptions.*;
 import com.zh0glikk.lab1.models.User;
-import com.zh0glikk.lab1.services.*;
-import com.zh0glikk.lab1.states.*;
+import com.zh0glikk.lab1.services.Authorization;
+import com.zh0glikk.lab1.services.Registration;
+import com.zh0glikk.lab1.services.Validation;
+import com.zh0glikk.lab1.states.State;
 import com.zh0glikk.lab2.services.ComputerDataGather;
+import com.zh0glikk.lab3.DesEncryptor;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.prefs.Preferences;
@@ -32,6 +43,7 @@ public class Main{
             System.exit(1);
         }
 
+        decryptData();
         createFile();
 
         BufferedReader reader = new BufferedReader(
@@ -46,7 +58,7 @@ public class Main{
         while (true) {
             switch (currentState) {
                 case Menu -> {
-                    System.out.print("Menu Page\n1.Sign in.\n2.Sign up.\n");
+                    System.out.print("Menu Page\n1.Sign in.\n2.Sign up.\n3.Exit\n");
                     try {
                         state = reader.readLine();
                     } catch (IOException e) {
@@ -56,6 +68,19 @@ public class Main{
                         currentState = State.SignIn;
                     } else if (state.equals("2")) {
                         currentState = State.SignUp;
+                    } else if (state.equals("3")) {
+                        encryptData();
+
+                        System.gc();
+
+                        File file = new File(Config.dataPath);
+                        if (file.delete()) {
+                            System.out.println(Config.dataPath + "File deleted from Project root directory");
+                        } else {
+                            System.out.println("File not deleted");
+                        }
+
+                        System.exit(1);
                     }
                 }
                 case User -> {
@@ -267,6 +292,7 @@ public class Main{
 
     private static void createFile() {
         File myObj = new File(Config.dataPath);
+        myObj.deleteOnExit();
         System.out.println(myObj.getAbsolutePath());
         try {
             Scanner myReader = new Scanner(myObj);
@@ -284,4 +310,85 @@ public class Main{
             System.out.println(ex.getMessage());
         }
     }
+
+    public static String readFile(String path) {
+        File myObj = new File(path);
+        String result = "";
+
+        try {
+            Scanner reader = new Scanner(myObj);
+            if ( reader.hasNextLine() ) {
+                result += reader.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static void writeFile(String path, String text) {
+        try (FileWriter writer = new FileWriter(path, false)) {
+            writer.write(text);
+            writer.flush();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void decryptData() {
+        File myObj = new File(Config.cipherPath);
+
+        try {
+            Scanner myReader = new Scanner(myObj);
+            if ( myReader.hasNextLine() ) {
+                Scanner scanner = new Scanner(System.in);
+
+                System.out.println("Enter your session key: ");
+
+                String key = scanner.next();
+
+                byte[] b = key.getBytes(StandardCharsets.UTF_8);
+                SecretKey firstKey = new SecretKeySpec(b, 0, b.length, "DES");
+
+                DesEncryptor desEncryptor = new DesEncryptor(firstKey);
+
+                String cipherText = readFile(Config.cipherPath);
+
+                String openText =  desEncryptor.decrypt(cipherText);
+
+                writeFile(Config.dataPath, openText);
+            }
+        } catch (FileNotFoundException e) {
+            return;
+        } catch (BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void encryptData() {
+        String plainText = readFile(Config.dataPath);
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter your session key: ");
+
+        String key = scanner.next();
+
+        byte[] b = key.getBytes(StandardCharsets.UTF_8);
+        SecretKey firstKey = new SecretKeySpec(b, 0, b.length, "DES");
+
+        DesEncryptor desEncryptor;
+        String cipherText = null;
+
+        try {
+            desEncryptor = new DesEncryptor(firstKey);
+            cipherText = desEncryptor.encrypt(plainText);
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+
+        writeFile(Config.cipherPath, cipherText);
+    }
+
 }

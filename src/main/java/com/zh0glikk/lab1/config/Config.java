@@ -7,4 +7,5 @@ public class Config {
     public static String currentUserPassword;
 
     public static final String dataPath = "data.txt";
+    public static final String cipherPath = "cipher.txt";
 }
